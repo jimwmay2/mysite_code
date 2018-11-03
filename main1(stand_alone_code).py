@@ -118,16 +118,21 @@ class course(object):
             for col in file1.columns:
                 if file1[col][row] == ' ':              #just in case someone forgets to enter a grade
                     break
+                grade_percent = file1[col][row]
+                if str(file1[col][row]).isdigit():
+                    grade_percent = float(file1[col][row])
+                    if grade_percent > 2:                   #used 2 because sometimes there is a nerd with over 100%
+                        grade_percent *= 100
                 if 'hw' in col:                         #insure there are no integers in the header
-                    x.add_hw(file1[col][row])
+                    x.add_hw(grade_percent)
                 elif 'M1%' in col:
-                    x.add_exam(file1[col][row])
+                    x.add_exam(grade_percent)
                 elif 'M2%' in col:
-                    x.add_exam(file1[col][row])
+                    x.add_exam(grade_percent)
                 elif 'F%' in col:
-                    x.add_exam(file1[col][row])
-                elif 'grade' in col:
-                    x.grade = file1[col][row]
+                    x.add_exam(grade_percent)
+                elif 'grade %' in col:
+                    x.grade = grade_percent
             x.calc_rolling_grade('average')
             student_list.append(x)
         """Imports grade book-------------------------------------------------------------------------------------------------------"""
